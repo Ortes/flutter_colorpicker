@@ -157,7 +157,7 @@ class ColorPicker extends StatefulWidget {
   final ValueChanged<List<Color>>? onHistoryChanged;
 
   @override
-  _ColorPickerState createState() => _ColorPickerState();
+  State<ColorPicker> createState() => _ColorPickerState();
 }
 
 class _ColorPickerState extends State<ColorPicker> {
@@ -579,10 +579,8 @@ class _SlidePickerState extends State<SlidePicker> {
 
   @override
   Widget build(BuildContext context) {
-    double fontSize = 14;
-    if (widget.labelTextStyle != null && widget.labelTextStyle?.fontSize != null) {
-      fontSize = widget.labelTextStyle?.fontSize ?? 14;
-    }
+    final double fontSize = widget.labelTextStyle?.fontSize ?? 14;
+
     final List<TrackType> trackTypes = [
       if (widget.colorModel == ColorModel.hsv) ...[TrackType.hue, TrackType.saturation, TrackType.value],
       if (widget.colorModel == ColorModel.hsl) ...[TrackType.hue, TrackType.saturationForHSL, TrackType.lightness],
@@ -601,7 +599,7 @@ class _SlidePickerState extends State<SlidePicker> {
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Text(
                     trackType.toString().split('.').last[0].toUpperCase(),
-                    style: widget.sliderTextStyle ?? Theme.of(context).textTheme.bodyText1,
+                    style: widget.sliderTextStyle ?? Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
               Expanded(child: colorPickerSlider(trackType)),
@@ -610,7 +608,7 @@ class _SlidePickerState extends State<SlidePicker> {
                   constraints: BoxConstraints(minWidth: fontSize * 2 + 5),
                   child: Text(
                     getColorParams(trackTypes.indexOf(trackType)),
-                    style: widget.sliderTextStyle ?? Theme.of(context).textTheme.bodyText2,
+                    style: widget.sliderTextStyle ?? Theme.of(context).textTheme.bodyMedium,
                     textAlign: TextAlign.right,
                   ),
                 ),
@@ -641,7 +639,7 @@ class _SlidePickerState extends State<SlidePicker> {
     );
   }
 }
-
+                                  
 /// The Color Picker with HUE Ring & HSV model.
 class HueRingPicker extends StatefulWidget {
   const HueRingPicker({
@@ -653,6 +651,7 @@ class HueRingPicker extends StatefulWidget {
     this.hueRingStrokeWidth = 20.0,
     this.enableAlpha = false,
     this.displayThumbColor = true,
+    this.disableTextInput = false,
     this.pickerAreaBorderRadius = const BorderRadius.all(Radius.zero),
   }) : super(key: key);
 
@@ -663,10 +662,12 @@ class HueRingPicker extends StatefulWidget {
   final double hueRingStrokeWidth;
   final bool enableAlpha;
   final bool displayThumbColor;
+  /// Disables the ability to manually edit the ColorPicker TextInput Field
+  final bool disableTextInput;
   final BorderRadius pickerAreaBorderRadius;
 
   @override
-  _HueRingPickerState createState() => _HueRingPickerState();
+  State<HueRingPicker> createState() => _HueRingPickerState();
 }
 
 class _HueRingPickerState extends State<HueRingPicker> {
@@ -746,6 +747,7 @@ class _HueRingPickerState extends State<HueRingPicker> {
                       },
                       enableAlpha: widget.enableAlpha,
                       embeddedText: true,
+                      disable: widget.disableTextInput,
                     ),
                   ),
                 ),
@@ -790,7 +792,7 @@ class _HueRingPickerState extends State<HueRingPicker> {
                       },
                       enableAlpha: widget.enableAlpha,
                       embeddedText: true,
-                      disable: true,
+                      disable: widget.disableTextInput,
                     ),
                     if (widget.enableAlpha) const SizedBox(height: 5),
                     if (widget.enableAlpha)

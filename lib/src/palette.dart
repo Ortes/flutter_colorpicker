@@ -1,6 +1,6 @@
-/// The components of HSV Color Picker
-///
-/// Try to create a Color Picker with other layout on your own :)
+// The components of HSV Color Picker
+//
+// Try to create a Color Picker with other layout on your own :)
 
 import 'dart:math';
 import 'package:flutter/gestures.dart';
@@ -81,6 +81,8 @@ class HSVWithHueColorPainter extends CustomPainter {
       Paint()
         ..color = pointerColor ?? (useWhiteForeground(hsvColor.toColor()) ? Colors.white : Colors.black)
         ..strokeWidth = circleSelectorWidth
+        // https://github.com/mchome/flutter_colorpicker/issues/130
+        // ..blendMode = BlendMode.luminosity
         ..style = PaintingStyle.stroke,
     );
   }
@@ -851,7 +853,7 @@ class ColorPickerLabel extends StatefulWidget {
   final List<ColorLabelType> colorLabelTypes;
 
   @override
-  _ColorPickerLabelState createState() => _ColorPickerLabelState();
+  State<ColorPickerLabel> createState() => _ColorPickerLabelState();
 }
 
 class _ColorPickerLabelState extends State<ColorPickerLabel> {
@@ -923,14 +925,14 @@ class _ColorPickerLabelState extends State<ColorPickerLabel> {
                   children: <Widget>[
                     Text(
                       item,
-                      style: widget.textStyle ?? Theme.of(context).textTheme.bodyText1,
+                      style: widget.textStyle ?? Theme.of(context).textTheme.bodyLarge,
                     ),
                     const SizedBox(height: 10.0),
                     Expanded(
                       child: Text(
                         colorValue(widget.hsvColor, _colorType)[_colorTypes[_colorType]!.indexOf(item)],
                         overflow: TextOverflow.ellipsis,
-                        style: widget.textStyle ?? Theme.of(context).textTheme.bodyText2,
+                        style: widget.textStyle ?? Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
                   ],
@@ -981,7 +983,7 @@ class ColorPickerInput extends StatefulWidget {
   final bool disable;
 
   @override
-  _ColorPickerInputState createState() => _ColorPickerInputState();
+  State<ColorPickerInput> createState() => _ColorPickerInputState();
 }
 
 class _ColorPickerInputState extends State<ColorPickerInput> {
@@ -997,6 +999,7 @@ class _ColorPickerInputState extends State<ColorPickerInput> {
   @override
   Widget build(BuildContext context) {
     if (inputColor != widget.color.value) {
+      // ignore: prefer_interpolation_to_compose_strings
       textEditingController.text = '#' +
           widget.color.red.toRadixString(16).toUpperCase().padLeft(2, '0') +
           widget.color.green.toRadixString(16).toUpperCase().padLeft(2, '0') +
@@ -1006,10 +1009,10 @@ class _ColorPickerInputState extends State<ColorPickerInput> {
     return Padding(
       padding: const EdgeInsets.only(top: 5.0),
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        if (!widget.embeddedText) Text('Hex', style: Theme.of(context).textTheme.bodyText1),
+        if (!widget.embeddedText) Text('Hex', style: Theme.of(context).textTheme.bodyLarge),
         const SizedBox(width: 10),
         SizedBox(
-          width: (Theme.of(context).textTheme.bodyText2?.fontSize ?? 14) * 10,
+          width: (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 14) * 10,
           child: TextField(
             enabled: !widget.disable,
             controller: textEditingController,
